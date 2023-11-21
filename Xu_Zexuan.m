@@ -1,4 +1,4 @@
-global R const_stefan absorbed_light E
+global R const_stefan absorbed_light E alpha_T A B Q
 
 R = 2.912;#(w-yr)/((m^2)*k)
 Q = 342 # W/(m^2)
@@ -6,6 +6,10 @@ alpha = 0.3 ;# albedo de la terre
 const_stefan = 5.67*10^(-8)# W/((m^2)*(K^2)) , constante de Stefan-Boltzmann
 absorbed_light = Q*(1-alpha)
 E = 0.61 #facteur emissivite
+A = 202
+B = 1.90
+alpha_T = @(T) 0.5 + 0.2 * tanh(0.1 * (265 - T - 273.5));
+
 function Question_1(t,T0)
     display("graph for question 1")
     global R const_stefan absorbed_light
@@ -51,15 +55,35 @@ function Question_3_bis(t,T0)
     legend(legend_entries)
     a = input('press enter to continue');
 endfunction
-
+function Question_4(t,T0)
+    display("graph for question 4")
+    a = input('press enter to continue');
+endfunction
+function Question_5()
+    t = 2022:1:2300;
+    T0 = 14.84;
+    display("graph for question 5")
+    global R const_stefan A B Q alpha_T
+    ode_sys = @(t,T)[(Q*(1-alpha_T(T))-(A+(B*T)))/R];
+    [t,T]= ode45(ode_sys, t, T0);
+    plot(t,T,'DisplayName', 'temperature');
+    hold on
+    line([min(t), max(t)], [19.41, 19.41], 'Color', 'r', 'LineStyle', '--');
+    legend('temperature','y=19.41')
+    xlabel('Time(years)')
+    ylabel('temperature(celsius)')
+    a = input('press enter to continue');
+endfunction
 
 
 T0 = 0;# temperature moyenne
 t = 0:1:(10^4); # temps en annee
-Question_1(t,T0);
-hold off;
+#Question_1(t,T0);
+#hold off;
 
-Question_3(t,T0);
-hold off;
-Question_3_bis(t,T0);
+#Question_3(t,T0);
+#hold off;
+#Question_3_bis(t,T0);
+#hold off;
+Question_5()
 hold off;
