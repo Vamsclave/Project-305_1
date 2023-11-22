@@ -23,7 +23,23 @@ function Question_1(t,T0)
     legend('temperature','y=254.90')
     a = input('press enter to continue');
 endfunction
-function Question_2()
+function Question_2(t,T0)
+    display("graph for question 2")
+    global R const_stefan Q
+    legend_entries = {};
+    for e = 0:0.1:1;
+      ode_sys = @(t,T)[(Q*(1-e)-(const_stefan*T^4))/R];
+      [t,T]= ode45(ode_sys, t, T0);
+      plot(t,T,'DisplayName', 'temperature', 'LineWidth', 2);
+
+      xlabel('Time(years)', 'FontSize', 24);
+      ylabel('temperature(kelvin)', 'FontSize', 24);
+      hold on
+      legend_entries = [legend_entries, sprintf('e = %.1f', e)];
+    end
+    set(gca, 'FontSize', 24);
+    legend(legend_entries)
+    legend(legend_entries, 'FontSize', 30);
     a = input('press enter to continue');
 endfunction
 function Question_3(t,T0)
@@ -81,9 +97,14 @@ t = 0:1:(10^4); # temps en annee
 #Question_1(t,T0);
 #hold off;
 
+
+tq2 = 0:1:20
+Question_2(t,T0);
+hold off;
+
 #Question_3(t,T0);
 #hold off;
 #Question_3_bis(t,T0);
 #hold off;
-Question_5()
-hold off;
+#Question_5()
+#hold off;
