@@ -10,6 +10,9 @@ A = 202
 B = 1.90
 alpha_T = @(T) 0.5 + 0.2 * tanh(0.1 * (265 - T - 273.5));
 
+
+
+
 function Question_1(t,T0)
     display("graph for question 1")
     global R const_stefan absorbed_light
@@ -39,7 +42,7 @@ function Question_2(t,T0)
     end
     set(gca, 'FontSize', 24);
     legend(legend_entries)
-    legend(legend_entries, 'FontSize', 30);
+    legend(legend_entries, 'FontSize', 40);
     a = input('press enter to continue');
 endfunction
 function Question_3(t,T0)
@@ -73,6 +76,14 @@ function Question_3_bis(t,T0)
 endfunction
 function Question_4(t,T0)
     display("graph for question 4")
+    global R const_stefan absorbed_light A B
+    ode_sys = @(t,T)[(absorbed_light-(A + B*T))/R];
+    [t,T]= ode45(ode_sys, t, T0);
+    plot(t,T,'DisplayName', 'temperature', 'LineWidth', 2);
+    xlabel('Time(years)', 'FontSize', 24)
+    ylabel('temperature(celcius)', 'FontSize', 24)
+    set(gca, 'FontSize', 24);
+    hold on
     a = input('press enter to continue');
 endfunction
 function Question_5()
@@ -99,12 +110,14 @@ t = 0:1:(10^4); # temps en annee
 
 
 tq2 = 0:1:20
-Question_2(t,T0);
-hold off;
+#Question_2(tq2,T0);
+#hold off;
 
 #Question_3(t,T0);
 #hold off;
 #Question_3_bis(t,T0);
 #hold off;
+Question_4(tq2, T0);
+
 #Question_5()
 #hold off;
